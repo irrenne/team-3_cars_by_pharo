@@ -60,6 +60,18 @@ Car >> model: aString [
 	model := aString
 ]
 
+{ #category : #printing }
+Car >> printOn: aStream [
+    aStream nextPutAll: 'Model: '. 
+	 model printOn: aStream. 
+    aStream nextPutAll: ' Initial Cost: $'.
+	 initialCost printOn: aStream.
+    aStream nextPutAll: ' Years in Use: '.
+	 yearsInUse printOn: aStream.
+	 aStream cr.
+
+]
+
 { #category : #accessing }
 Car >> yearsInUse [
 
