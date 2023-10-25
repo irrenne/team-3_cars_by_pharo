@@ -29,6 +29,11 @@ Car >> estimatedValue [
 ]
 
 { #category : #accessing }
+Car >> increaseYearsInUse [
+    yearsInUse := yearsInUse + 1.
+]
+
+{ #category : #accessing }
 Car >> initialCost [
 
 	^ initialCost
