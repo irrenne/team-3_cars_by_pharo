@@ -73,7 +73,6 @@ Car >> printOn: aStream [
 	 initialCost printOn: aStream.
     aStream nextPutAll: ' Years in Use: '.
 	 yearsInUse printOn: aStream.
-	 aStream cr.
 
 ]
 

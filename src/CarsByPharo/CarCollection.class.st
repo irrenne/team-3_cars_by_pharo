@@ -50,6 +50,35 @@ CarCollection >> printOn: aStream [
     cars do: [:each | aStream print: each; cr].
 ]
 
+{ #category : #reading }
+CarCollection >> readFromFile: fileName [
+	| file line tokens model initialCost yearsInUse car |
+	file := fileName asFileReference readStream.
+
+	[file atEnd] whileFalse: [
+    	line := file nextLine.
+    	tokens := line substrings: ' '''.
+    
+    	model := (tokens at: 2).
+    	initialCost := (tokens at: 5) asInteger.
+    	yearsInUse := (tokens at: 9) asInteger.
+    
+    	car := Car new initializeWithModel: model cost: initialCost yearsInUse: yearsInUse.
+     	(tokens includes: 'Company:') ifTrue: [
+            car := Taxi new.
+            car model: (tokens at: 2).
+            car initialCost: (tokens at: 5) asInteger.
+            car yearsInUse: (tokens at: 9) asInteger.
+            car company: (tokens at: 11).
+            car depreciationRate: (tokens last) asNumber.
+        ].
+
+    	cars add: car.
+	]. 
+
+	file close.
+]
+
 { #category : #writing }
 CarCollection >> writeToFile: fileName [
 	 |file|

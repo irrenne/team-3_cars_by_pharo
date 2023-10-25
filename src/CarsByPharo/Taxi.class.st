@@ -59,5 +59,4 @@ Taxi >> printOn: aStream [
     company printOn: aStream.
     aStream nextPutAll: ' Depreciation Rate: '.
     depreciationRate printOn: aStream.
-    aStream cr.
 ]
