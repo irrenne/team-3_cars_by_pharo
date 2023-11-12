@@ -45,6 +45,16 @@ Taxi >> depreciationRate: anObject [
 	depreciationRate := anObject
 ]
 
+{ #category : #calculating }
+Taxi >> estimatedValue [
+    "Обчислює оціночну вартість таксі"
+    | depreciationRateTaxi value |
+    depreciationRateTaxi := 1 - (depreciationRate / 10). "(10 * k)% depreciation rate per year"
+    value := initialCost.
+    yearsInUse timesRepeat: [ value := value * depreciationRateTaxi ].
+    ^value.
+]
+
 { #category : #initialization }
 Taxi >> initializeWithModel: aModel cost: anInitialCost yearsInUse: years company: aCompany depreciationRate: aRate [
     self initializeWithModel: aModel cost: anInitialCost yearsInUse: years.
