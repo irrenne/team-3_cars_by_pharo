@@ -1,34 +1,36 @@
 "
-Class for storing cars
+Class garagegege for storing cars
 "
 Class {
-	#name : #CarCollection,
+	#name : #Garage,
 	#superclass : #Object,
 	#instVars : [
+		'name',
+		'owner',
 		'cars'
 	],
 	#category : #CarsByPharo
 }
 
 { #category : #adding }
-CarCollection >> add: aCar [
+Garage >> add: aCar [
     cars add: aCar.
 ]
 
 { #category : #accessing }
-CarCollection >> cars [
+Garage >> cars [
 
 	^ cars
 ]
 
 { #category : #accessing }
-CarCollection >> cars: anObject [
+Garage >> cars: anObject [
 
 	cars := anObject
 ]
 
 { #category : #'finding/searching' }
-CarCollection >> findCheapestCar [
+Garage >> findCheapestCar [
     | cheapestCar |
     cheapestCar := cars first.
     cars do: [:each | (each < cheapestCar) ifTrue: [cheapestCar := each]].
@@ -36,22 +38,59 @@ CarCollection >> findCheapestCar [
 ]
 
 { #category : #accessing }
-CarCollection >> increaseYearsInUse [
+Garage >> increaseYearsInUse [
 	cars do: [:each | each increaseYearsInUse].
 ]
 
 { #category : #initialization }
-CarCollection >> initialize [
+Garage >> initialize [
     cars := OrderedCollection new.
 ]
 
+{ #category : #initialization }
+Garage >> initializeWithName: aName owner: anOwner [
+    name := aName.
+	 owner := anOwner.
+	 cars := OrderedCollection new.
+]
+
+{ #category : #accessing }
+Garage >> name [
+
+	^ name
+]
+
+{ #category : #accessing }
+Garage >> name: anObject [
+
+	name := anObject
+]
+
+{ #category : #accessing }
+Garage >> owner [
+
+	^ owner
+]
+
+{ #category : #accessing }
+Garage >> owner: anObject [
+
+	owner := anObject
+]
+
 { #category : #adding }
-CarCollection >> printOn: aStream [
-    cars do: [:each | aStream print: each; cr].
+Garage >> printOn: aStream [
+	aStream nextPutAll: ' Name: '. 
+   name printOn: aStream.
+	aStream cr.
+	aStream nextPutAll: ' Owner: '. 
+   owner printOn: aStream.
+	aStream cr.
+	cars do: [:each | aStream print: each; cr].
 ]
 
 { #category : #reading }
-CarCollection >> readFromFile: fileName [
+Garage >> readFromFile: fileName [
 	| file line tokens model initialCost yearsInUse car |
 	file := fileName asFileReference readStream.
 
@@ -79,8 +118,24 @@ CarCollection >> readFromFile: fileName [
 	file close.
 ]
 
+{ #category : #removing }
+Garage >> sellCar: carModel [
+	cars removeAllSuchThat: [:each | (each model = carModel)].
+	
+]
+
+{ #category : #calculating }
+Garage >> sumOfAllCarsCost [
+	| total |
+    total := 0.
+    
+    cars do: [:each | total := total + each estimatedValue].
+
+    ^ total.
+]
+
 { #category : #writing }
-CarCollection >> writeToFile: fileName [
+Garage >> writeToFile: fileName [
 	 |file|
 	 file := fileName asFileReference writeStream.
     cars do: [:car |
