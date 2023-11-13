@@ -30,11 +30,37 @@ Garage >> cars: anObject [
 ]
 
 { #category : #'finding/searching' }
+Garage >> findAllTaxiByCompany: aCompany [
+	
+	 ^ cars select: [:each | (each isKindOf: Taxi) and: [each company = aCompany]]
+]
+
+{ #category : #'finding/searching' }
+Garage >> findCarsCheaperThan: price [
+	
+	 ^ cars select: [:each | each initialCost > price].
+]
+
+{ #category : #'finding/searching' }
+Garage >> findCarsOlderThan: years [
+
+    ^ cars select: [:each | each yearsInUse > years].
+]
+
+{ #category : #'finding/searching' }
 Garage >> findCheapestCar [
     | cheapestCar |
     cheapestCar := cars first.
     cars do: [:each | (each < cheapestCar) ifTrue: [cheapestCar := each]].
     ^ cheapestCar
+]
+
+{ #category : #'finding/searching' }
+Garage >> findMostExpensiveCar [
+    | mostExpensiveCar |
+    mostExpensiveCar := cars first.
+    cars do: [:each | (each > mostExpensiveCar) ifTrue: [mostExpensiveCar := each]].
+    ^ mostExpensiveCar
 ]
 
 { #category : #accessing }
@@ -122,6 +148,13 @@ Garage >> readFromFile: fileName [
 Garage >> sellCar: carModel [
 	cars removeAllSuchThat: [:each | (each model = carModel)].
 	
+]
+
+{ #category : #accessing }
+Garage >> setDeprecationRate: aDeprecationRate ForTaxiByModel: aModel [
+	 | taxi |
+	 taxi := cars detect: [:each | (each isKindOf: Taxi) and: [each model = aModel]] ifNone: [^ self].
+    taxi depreciationRate: aDeprecationRate.
 ]
 
 { #category : #calculating }
