@@ -18,6 +18,12 @@ Car >> < aCar [
     ^self estimatedValue < aCar estimatedValue.
 ]
 
+{ #category : #comparing }
+Car >> > aCar [
+    "Порівняння автомобілів за їхньою вартістю"
+    ^self estimatedValue > aCar estimatedValue.
+]
+
 { #category : #calculating }
 Car >> estimatedValue [
     "Обчислює оціночну вартість автомобіля"
