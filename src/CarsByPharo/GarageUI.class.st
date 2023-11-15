@@ -97,7 +97,7 @@ GarageUI >> open: aGarage [
 { #category : #'accessing - ui' }
 GarageUI >> openGarageWindow [
     | buttonBar fileButton loadButton increaseYearButton addButton sellButton windowExtent xOffset yOffset cheapestCarButton mostExpensiveButton cheaperThanButton olderThanButton taxiByCompanyButton allCarsCostButton showAllCarsButton |
-    
+
     windowExtent := 900@600.
 
     contentMorph := TextMorph new.
@@ -134,54 +134,40 @@ GarageUI >> openGarageWindow [
         target: self;
         actionSelector: #sellCar;
         label: 'Sell Car'.
+    cheapestCarButton := SimpleButtonMorph new
+        target: self;
+        actionSelector: #showCheapestCar;
+        label: 'Cheapest Car'.
+    mostExpensiveButton := SimpleButtonMorph new
+        target: self;
+        actionSelector: #showMostExpensiveCar;
+        label: 'Most Expensive Car'.
+    cheaperThanButton := SimpleButtonMorph new
+        target: self;
+        actionSelector: #showCarsCheaperThan;
+        label: 'Cheaper Than'.
+    olderThanButton := SimpleButtonMorph new
+        target: self;
+        actionSelector: #showOlderThan;
+        label: 'Older Than'.
+    taxiByCompanyButton := SimpleButtonMorph new
+        target: self;
+        actionSelector: #showTaxiByCompany;
+        label: 'Taxi By Company'.
+    allCarsCostButton := SimpleButtonMorph new
+        target: self;
+        actionSelector: #showAllCarsCost;
+        label: 'All Cars Cost'.
+    showAllCarsButton := SimpleButtonMorph new
+        target: self;
+        actionSelector: #updateContentMorph;
+        label: 'All Cars'.
 
-cheapestCarButton := SimpleButtonMorph new
-    target: self;
-    actionSelector: #showCheapestCar;
-    label: 'Cheapest Car'.
-mostExpensiveButton := SimpleButtonMorph new
-    target: self;
-    actionSelector: #showMostExpensiveCar;
-    label: 'Most Expensive Car'.
-cheaperThanButton := SimpleButtonMorph new
-    target: self;
-    actionSelector: #showCarsCheaperThan;
-    label: 'Cheaper Than'.
-olderThanButton := SimpleButtonMorph new
-    target: self;
-    actionSelector: #showOlderThan;
-    label: 'Older Than'.
-taxiByCompanyButton := SimpleButtonMorph new
-    target: self;
-    actionSelector: #showTaxiByCompany;
-    label: 'Taxi By Company'.
-allCarsCostButton := SimpleButtonMorph new
-    target: self;
-    actionSelector: #showAllCarsCost;
-    label: 'All Cars Cost'.
-showAllCarsButton := SimpleButtonMorph new
-    target: self;
-    actionSelector: #updateContentMorph;
-    label: 'All Cars'.
-
-
-    
-    buttonBar addMorph: fileButton.
-    buttonBar addMorph: loadButton.
-    buttonBar addMorph: increaseYearButton.
-    buttonBar addMorph: addButton.
-    buttonBar addMorph: sellButton.
-	 buttonBar addMorph: cheapestCarButton.
-buttonBar addMorph: mostExpensiveButton.
-buttonBar addMorph: cheaperThanButton.
-buttonBar addMorph: olderThanButton.
-buttonBar addMorph: taxiByCompanyButton.
-buttonBar addMorph: allCarsCostButton.
-buttonBar addMorph: showAllCarsButton.
+    buttonBar addMorph: fileButton; addMorph: loadButton; addMorph: increaseYearButton; addMorph: addButton; addMorph: sellButton.
+    buttonBar addMorph: cheapestCarButton; addMorph: mostExpensiveButton; addMorph: cheaperThanButton; addMorph: olderThanButton.
+    buttonBar addMorph: taxiByCompanyButton; addMorph: allCarsCostButton; addMorph: showAllCarsButton.
 
     garageWindow addMorph: buttonBar.
-
-
     garageWindow openInWorld.
 
 ]
@@ -217,9 +203,13 @@ GarageUI >> showAllCarsCost [
 
 { #category : #'api - showing' }
 GarageUI >> showCarsCheaperThan [
-	| cost |
-	cost := (UIManager default request: 'Enter Cost', String new) asInteger ifNil: [^ self].
-	contentMorph contents: (garage findCarsCheaperThan: cost printString).
+   | cost cheaperCars |
+    cost := (UIManager default request: 'Enter Initial Cost:' , String new) asInteger ifNil: [^ self].
+    cheaperCars := garage findCarsCheaperThan: cost.
+    contentMorph contents: ''.
+    cheaperCars do: [:car |
+        contentMorph contents: (car printString , String cr , (contentMorph contents)).
+    ].
 ]
 
 { #category : #'api - showing' }
@@ -235,9 +225,14 @@ GarageUI >> showMostExpensiveCar [
 
 { #category : #'api - showing' }
 GarageUI >> showOlderThan [
-	| years |
+	| years olderCars |
 	years := (UIManager default request: 'Enter Years:', String new) asInteger ifNil: [^ self].
-	contentMorph contents: (garage findCarsOlderThan: years printString).
+	contentMorph contents: ''.
+	olderCars := (garage findCarsOlderThan: years).
+	olderCars do: [:car |
+   		contentMorph contents: (car printString , String cr , (contentMorph contents)).
+   ].
+
 ]
 
 { #category : #'api - showing' }
@@ -247,9 +242,12 @@ GarageUI >> showTaxiByCompany [
 
     resultMessage := garage findAllTaxiByCompany: company.
     
+	 contentMorph contents: ''.
     resultMessage isEmpty
         ifTrue: [contentMorph contents: 'No Taxi found with this company.']
-        ifFalse: [contentMorph contents: resultMessage printString].
+        ifFalse: [resultMessage do: [:car |
+        		contentMorph contents: (car printString , String cr , (contentMorph contents)).
+    	  ]].
 
 ]
 

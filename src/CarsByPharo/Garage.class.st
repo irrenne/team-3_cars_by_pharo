@@ -38,7 +38,7 @@ Garage >> findAllTaxiByCompany: aCompany [
 { #category : #'finding/searching' }
 Garage >> findCarsCheaperThan: price [
 	
-	 ^ cars select: [:each | each initialCost > price].
+	 ^ cars select: [:each | each initialCost < price].
 ]
 
 { #category : #'finding/searching' }
