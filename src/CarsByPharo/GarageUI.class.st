@@ -51,6 +51,17 @@ GarageUI >> addCarToGarage [
 
 ]
 
+{ #category : #adding }
+GarageUI >> createButtonWithLabel: aLabel action: anActionSelector [
+    | button |
+    button := SimpleButtonMorph new
+        target: self;
+        actionSelector: anActionSelector;
+        label: aLabel;
+		  color: Color lightGray.
+    ^ button.
+]
+
 { #category : #accessing }
 GarageUI >> garage [
 
@@ -98,7 +109,7 @@ GarageUI >> open: aGarage [
 GarageUI >> openGarageWindow [
     | buttonBar fileButton loadButton increaseYearButton addButton sellButton windowExtent xOffset yOffset cheapestCarButton mostExpensiveButton cheaperThanButton olderThanButton taxiByCompanyButton allCarsCostButton showAllCarsButton |
 
-    windowExtent := 900@600.
+    windowExtent := 900 @ 600.
 
     contentMorph := TextMorph new.
     contentMorph contents: (garage printString).
@@ -109,63 +120,29 @@ GarageUI >> openGarageWindow [
     xOffset := (garageWindow width - contentMorph width) / 2.
     yOffset := (garageWindow height - contentMorph height) / 2.
 
-    contentMorph position: xOffset@yOffset.
+    contentMorph position: xOffset @ yOffset.
 
     garageWindow addMorph: contentMorph.
 
     buttonBar := AlignmentMorph newRow.
-    fileButton := SimpleButtonMorph new
-        target: self;
-        actionSelector: #saveGarage;
-        label: 'Save'.
-    loadButton := SimpleButtonMorph new
-        target: self;
-        actionSelector: #loadGarage;
-        label: 'Load'.
-    increaseYearButton := SimpleButtonMorph new
-        target: self;
-        actionSelector: #increaseYearsInUse;
-        label: 'Increase Years'.
-    addButton := SimpleButtonMorph new
-        target: self;
-        actionSelector: #addCarToGarage;
-        label: 'Add Car'.
-    sellButton := SimpleButtonMorph new
-        target: self;
-        actionSelector: #sellCar;
-        label: 'Sell Car'.
-    cheapestCarButton := SimpleButtonMorph new
-        target: self;
-        actionSelector: #showCheapestCar;
-        label: 'Cheapest Car'.
-    mostExpensiveButton := SimpleButtonMorph new
-        target: self;
-        actionSelector: #showMostExpensiveCar;
-        label: 'Most Expensive Car'.
-    cheaperThanButton := SimpleButtonMorph new
-        target: self;
-        actionSelector: #showCarsCheaperThan;
-        label: 'Cheaper Than'.
-    olderThanButton := SimpleButtonMorph new
-        target: self;
-        actionSelector: #showOlderThan;
-        label: 'Older Than'.
-    taxiByCompanyButton := SimpleButtonMorph new
-        target: self;
-        actionSelector: #showTaxiByCompany;
-        label: 'Taxi By Company'.
-    allCarsCostButton := SimpleButtonMorph new
-        target: self;
-        actionSelector: #showAllCarsCost;
-        label: 'All Cars Cost'.
-    showAllCarsButton := SimpleButtonMorph new
-        target: self;
-        actionSelector: #updateContentMorph;
-        label: 'All Cars'.
+    buttonBar color: Color transparent.
+    buttonBar layoutInset: 30 @ 40.
 
-    buttonBar addMorph: fileButton; addMorph: loadButton; addMorph: increaseYearButton; addMorph: addButton; addMorph: sellButton.
-    buttonBar addMorph: cheapestCarButton; addMorph: mostExpensiveButton; addMorph: cheaperThanButton; addMorph: olderThanButton.
-    buttonBar addMorph: taxiByCompanyButton; addMorph: allCarsCostButton; addMorph: showAllCarsButton.
+    fileButton := self createButtonWithLabel: 'Save' action: #saveGarage.
+    loadButton := self createButtonWithLabel: 'Load' action: #loadGarage.
+    increaseYearButton := self createButtonWithLabel: 'Increase Years' action: #increaseYearsInUse.
+    addButton := self createButtonWithLabel: 'Add Car' action: #addCarToGarage.
+    sellButton := self createButtonWithLabel: 'Sell Car' action: #sellCar.
+    cheapestCarButton := self createButtonWithLabel: 'Cheapest Car' action: #showCheapestCar.
+    mostExpensiveButton := self createButtonWithLabel: 'Most Expensive Car' action: #showMostExpensiveCar.
+    cheaperThanButton := self createButtonWithLabel: 'Cheaper Than' action: #showCarsCheaperThan.
+    olderThanButton := self createButtonWithLabel: 'Older Than' action: #showOlderThan.
+    taxiByCompanyButton := self createButtonWithLabel: 'Taxi By Company' action: #showTaxiByCompany.
+    allCarsCostButton := self createButtonWithLabel: 'All Cars Cost' action: #showAllCarsCost.
+    showAllCarsButton := self createButtonWithLabel: 'All Cars' action: #updateContentMorph.
+
+	 buttonBar addAllMorphs: {fileButton. loadButton. increaseYearButton. addButton. sellButton. cheapestCarButton. 									 									 mostExpensiveButton. cheaperThanButton. olderThanButton. taxiByCompanyButton. 
+									 allCarsCostButton. showAllCarsButton}.
 
     garageWindow addMorph: buttonBar.
     garageWindow openInWorld.
