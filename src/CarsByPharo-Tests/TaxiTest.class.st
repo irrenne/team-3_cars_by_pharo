@@ -31,3 +31,16 @@ c initializeWithModel: 'Toyota' cost: 12000 yearsInUse: 11 company: 'SuperTaxi' 
     ].
 self assert: (c calculateDepreciationRate ) closeTo:  cor.
 ]
+
+{ #category : #tests }
+TaxiTest >> testEstimatedValue [
+|c cor value|
+
+c:=Taxi new.
+c initializeWithModel: 'Toyota' cost: 12000 yearsInUse: 11 company: 'SuperTaxi' depreciationRate: 1.2.
+cor := 1 - (c depreciationRate / 10). "(10 * k)% depreciation rate per year"
+value := c initialCost.
+c yearsInUse timesRepeat: [ value := value * cor ].
+
+self assert: (c estimatedValue ) closeTo:  value.
+]
